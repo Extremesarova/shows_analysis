@@ -1,0 +1,9 @@
+*.db
+.ipynb_checkpoints
+venv/
+.idea/
+__pycache__
+data/
+*.bin
+*.zip
+*.tsv
