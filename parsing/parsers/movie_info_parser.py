@@ -1,0 +1,2 @@
+class MovieInfoParser:
+    pass
