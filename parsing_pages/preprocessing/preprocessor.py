@@ -2,8 +2,10 @@ import unicodedata
 
 
 class Preprocessor:
-    def __init__(self, cleaner_map: dict = {"\t": "", "\n": "", "\r": ""}):
-        self.translator: dict = str.maketrans(cleaner_map)
+    CLEANER_MAP = {"\t": "", "\n": "", "\r": ""}
+
+    def __init__(self):
+        self.translator: dict = str.maketrans(self.CLEANER_MAP)
 
     def preprocess_string(self, str_: str) -> str:
         str_ = unicodedata.normalize("NFKD", str_)
