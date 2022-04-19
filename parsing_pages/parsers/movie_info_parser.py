@@ -8,6 +8,31 @@ from parsing_pages.preprocessing.preprocessor import Preprocessor
 
 class MovieInfoParser:
     MOVIE_URL_TEMP = "https://www.kinopoisk.ru/film/"
+    TITLES_MAP = {'Год производства': "year",
+                  'Страна': "country",
+                  'Жанр': "genre",
+                  'Слоган': "slogan",
+                  'Режиссер': "director",
+                  'Сценарий': "scriptwriter",
+                  'Продюсер': "producer",
+                  'Оператор': "operator",
+                  'Композитор': "composer",
+                  'Художник': "artist",
+                  'Монтаж': "cut",
+                  'Бюджет': "budget",
+                  'Маркетинг': "marketing",
+                  'Сборы в США': "us_box_office",
+                  'Сборы в мире': "world_box_office",
+                  'Зрители': "viewers",
+                  'Сборы в России': "russian_box_office",
+                  'Премьера в Росcии': "russian_premiere",
+                  'Премьера в мире': "world_premiere",
+                  'Релиз на DVD': "dvd_release",
+                  'Релиз на Blu-ray': "blue_ray_release",
+                  'Возраст': "age_rating",
+                  'Рейтинг MPAA': "mpaa_rating",
+                  'Время': "duration"
+                  }
 
     def __init__(self, movie_soup: BeautifulSoup):
         self.movie_soup = movie_soup
@@ -22,6 +47,7 @@ class MovieInfoParser:
         return MovieId(id=id)
 
     def get_titles(self) -> MovieTitles:
+        # TODO preprocess values
         russian_title: str = self.movie_soup.find_all("h1", attrs={"class": re.compile("styles_title")})[0].get_text()
         original_title: str = \
             self.movie_soup.find_all("span", attrs={"class": re.compile("styles_originalTitle")})[
@@ -42,7 +68,8 @@ class MovieInfoParser:
         return MovieCast(actors, voice_actors)
 
     def get_info(self) -> MovieInfo:
-        movie_info_divs = self.movie_soup.find_all(attrs={"data-test-id": "encyclopedic-table"})[0]
+        # TODO preprocess values
+        movie_info_divs = self.movie_soup.find_all("div", attrs={"data-test-id": re.compile("encyclopedic-table")})[0]
 
         values = []
         for div in movie_info_divs.find_all(
@@ -58,6 +85,8 @@ class MovieInfoParser:
             titles.append(current_title)
 
         assert len(values) == len(titles)
-        info_dict = dict(zip(titles, values))
 
-        return info_dict
+        titles_en = [self.TITLES_MAP.get(title, "") for title in titles]
+        info_dict = dict(zip(titles_en, values))
+
+        return MovieInfo(**info_dict)

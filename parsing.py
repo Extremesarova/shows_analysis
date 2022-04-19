@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from tqdm import tqdm
+
 from config.config_reader import ConfigReader
 from parsing_pages.parsers.movie_info_parser import MovieInfoParser
 from parsing_pages.parsers.movie_reviews_parser import MovieReviewsParser
@@ -12,14 +14,16 @@ def main():
     data_path = config.get("path", "data")
 
     pathlist = Path(data_path).rglob("*.html")
-    for path in pathlist:
+    for path in tqdm(pathlist):
         str_path = str(path)
         page_type = get_page_type(str_path)
-        soup = PageReader(str_path).soup
 
         if page_type == "review":
+            continue
+            soup = PageReader(str_path).soup
             movie_review_parser = MovieReviewsParser()
         else:
+            soup = PageReader(str_path).soup
             movie_info_parser = MovieInfoParser(soup)
             a = 42
 

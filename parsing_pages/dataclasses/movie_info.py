@@ -1,3 +1,4 @@
+import inspect
 from dataclasses import dataclass
 from typing import List
 
@@ -33,10 +34,10 @@ class MovieInfo:
     artist: List[str]
     cut: List[str]
     budget: str
-    marketing: str
     us_box_office: str
     world_box_office: str
     viewers: List[str]
+    russian_box_office: str
     russian_premiere: str
     world_premiere: str
     dvd_release: str
@@ -45,14 +46,14 @@ class MovieInfo:
     mpaa_rating: str
     duration: str
 
-    # @classmethod
-    # def from_dict_to_dataclass(cls, data):
-    #     return cls(
-    #         **{
-    #             key: (data[key] if val.default == val.empty else data.get(key, val.default))
-    #             for key, val in inspect.signature(MovieInfo).parameters.items()
-    #         }
-    #     )
+    @classmethod
+    def from_dict_to_dataclass(cls, data):
+        return cls(
+            **{
+                key: (data[key] if val.default == val.empty else data.get(key, val.default))
+                for key, val in inspect.signature(MovieInfo).parameters.items()
+            }
+        )
 
 
 @dataclass
