@@ -6,7 +6,6 @@ class PageReader:
 
     def __init__(self, path: str):
         self.path = path
-        self.soup = self._get_soup()
 
     def _read_page(self) -> str:
         with open(self.path, "r", encoding='utf-8') as f:
@@ -14,7 +13,7 @@ class PageReader:
 
         return page
 
-    def _get_soup(self) -> BeautifulSoup:
+    def get_soup(self) -> BeautifulSoup:
         page = self._read_page()
         soup = BeautifulSoup(page, "html.parser")
 

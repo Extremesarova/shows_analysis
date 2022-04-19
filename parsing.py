@@ -1,5 +1,7 @@
+from dataclasses import asdict
 from pathlib import Path
 
+import pandas as pd
 from tqdm import tqdm
 
 from config.config_reader import ConfigReader
@@ -13,6 +15,8 @@ def main():
     config = ConfigReader().config
     data_path = config.get("path", "data")
 
+    movie_rows_list = []
+
     pathlist = Path(data_path).rglob("*.html")
     for path in tqdm(pathlist):
         str_path = str(path)
@@ -20,14 +24,20 @@ def main():
 
         if page_type == "review":
             continue
-            soup = PageReader(str_path).soup
+            soup = PageReader(str_path).get_soup()
             movie_review_parser = MovieReviewsParser()
         else:
-            soup = PageReader(str_path).soup
+            # print(str_path, page_type)
+            soup = PageReader(str_path).get_soup()
             movie_info_parser = MovieInfoParser(soup)
-            a = 42
+            movie_dict = asdict(movie_info_parser.movie_info)
+            flatten_dict = {}
+            for key, value in movie_dict.items():
+                flatten_dict = {**flatten_dict, **value}
+            movie_rows_list.append(flatten_dict)
 
-        print(str_path, page_type)
+    movie_df = pd.DataFrame(movie_rows_list)
+    movie_df.to_csv("movie_info.csv", index=False)
 
 
 if __name__ == "__main__":
