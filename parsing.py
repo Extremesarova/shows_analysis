@@ -23,9 +23,10 @@ def main():
         page_type = get_page_type(str_path)
 
         if page_type == "review":
-            continue
             soup = PageReader(str_path).get_soup()
-            movie_review_parser = MovieReviewsParser()
+            movie_review_parser = MovieReviewsParser(soup)
+            review_dict = asdict(movie_review_parser.movie_reviews)
+            break
         else:
             # print(str_path, page_type)
             soup = PageReader(str_path).get_soup()

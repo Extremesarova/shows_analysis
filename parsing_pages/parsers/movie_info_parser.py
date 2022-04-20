@@ -3,7 +3,7 @@ import re
 from bs4 import BeautifulSoup
 
 from parsing_pages.dataclasses.movie_info import MovieId, Titles, Cast, MovieInfo, UserRating, Synopsis, \
-    CriticsRating, Movie, from_dict_to_dataclass
+    CriticsRating, MoviePage, from_dict_to_dataclass
 from parsing_pages.preprocessing.preprocessor import Preprocessor
 
 
@@ -39,15 +39,14 @@ class MovieInfoParser:
     def __init__(self, movie_soup: BeautifulSoup):
         self.movie_soup = movie_soup
         self.preprocessor = Preprocessor()
-        self.movie_dict = {}
 
-        self.movie_info = Movie(id=self.get_id(),
-                                titles=self.get_titles(),
-                                cast=self.get_actors(),
-                                info=self.get_info(),
-                                user_rating=self.get_rating(),
-                                synopsis=self.get_synopsis(),
-                                critics_rating=self.get_critics_rating())
+        self.movie_info = MoviePage(id=self.get_id(),
+                                    titles=self.get_titles(),
+                                    cast=self.get_actors(),
+                                    info=self.get_info(),
+                                    user_rating=self.get_rating(),
+                                    synopsis=self.get_synopsis(),
+                                    critics_rating=self.get_critics_rating())
 
     @staticmethod
     def right_strip_trailing(original: str, trailing: str) -> str:

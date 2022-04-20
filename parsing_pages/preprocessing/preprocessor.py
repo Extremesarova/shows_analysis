@@ -1,3 +1,5 @@
+import re
+
 import unicodedata
 
 
@@ -13,3 +15,7 @@ class Preprocessor:
         str_ = " ".join(str_.split())
 
         return str_
+
+    @staticmethod
+    def has_numbers(str_: str) -> bool:
+        return bool(re.search(r"\d", str_))
