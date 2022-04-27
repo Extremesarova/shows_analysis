@@ -23,7 +23,7 @@ class MovieReviewsParser:
             if self.preprocessor.has_numbers(s) and (("/" in s) or ("из" in s)):
                 scores.append(s)
 
-        score_candidate = BeautifulSoup(scores[-1]).get_text() if scores else "N/A"
+        score_candidate = BeautifulSoup(scores[-1], "html.parser").get_text() if scores else "N/A"
         if scores and len(score_candidate.split(" ")) <= 4 and score_candidate != "N/A":
             score = score_candidate
         return score

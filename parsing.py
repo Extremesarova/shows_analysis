@@ -1,3 +1,4 @@
+import os
 from dataclasses import asdict
 from pathlib import Path
 
@@ -16,19 +17,22 @@ def main():
     data_path = config.get("path", "data")
 
     movie_rows_list = []
+    review_rows_list = []
+
+    _, _, files = next(os.walk(data_path))
+    file_count = len(files)
 
     pathlist = Path(data_path).rglob("*.html")
-    for path in tqdm(pathlist):
+    for path in tqdm(pathlist, total=file_count, desc="Parsing movie pages", unit="page"):
         str_path = str(path)
         page_type = get_page_type(str_path)
 
         if page_type == "review":
             soup = PageReader(str_path).get_soup()
             movie_review_parser = MovieReviewsParser(soup)
-            review_dict = asdict(movie_review_parser.movie_reviews)
-            break
+            review_dict = asdict(movie_review_parser.movie_reviews)['review']
+            review_rows_list.extend(review_dict)
         else:
-            # print(str_path, page_type)
             soup = PageReader(str_path).get_soup()
             movie_info_parser = MovieInfoParser(soup)
             movie_dict = asdict(movie_info_parser.movie_info)
@@ -38,7 +42,10 @@ def main():
             movie_rows_list.append(flatten_dict)
 
     movie_df = pd.DataFrame(movie_rows_list)
-    movie_df.to_csv("movie_info.csv", index=False)
+    movie_df.to_csv("movies.csv", index=False)
+
+    review_df = pd.DataFrame(review_rows_list)
+    review_df.to_csv("reviews.csv", index=False)
 
 
 if __name__ == "__main__":
