@@ -42,10 +42,10 @@ def main():
             movie_rows_list.append(flatten_dict)
 
     movie_df = pd.DataFrame(movie_rows_list)
-    movie_df.to_csv("movies.csv", index=False)
+    movie_df.to_csv("movies.csv", sep=";", index=False)
 
     review_df = pd.DataFrame(review_rows_list)
-    review_df.to_csv("reviews.csv", index=False)
+    review_df.to_csv("reviews.csv", sep=";", index=False)
 
 
 if __name__ == "__main__":

@@ -35,6 +35,7 @@ class MovieInfoParser:
                   'Рейтинг MPAA': "mpaa_rating",
                   'Время': "duration"
                   }
+    NA_TAG = "N/A"
 
     def __init__(self, movie_soup: BeautifulSoup):
         self.movie_soup = movie_soup
@@ -108,7 +109,11 @@ class MovieInfoParser:
         assert len(values) == len(titles)
 
         titles_en = [self.TITLES_MAP.get(title, "") for title in titles]
-        info_dict = dict(zip(titles_en, values))
+
+        info_dict: dict = dict(zip(titles_en, values))
+        
+        info_dict["year"] = int(info_dict["year"])
+        info_dict["slogan"] = info_dict["slogan"] if info_dict["slogan"] != "—" else self.NA_TAG
 
         return from_dict_to_dataclass(MovieInfo, info_dict)
 

@@ -2,13 +2,15 @@ import re
 
 from bs4 import BeautifulSoup, Tag
 
-from parsing_pages.dataclasses.movie_info import MovieId, Review, Reviews
+from parsing_pages.dataclasses.movie_info import MovieId
+from parsing_pages.dataclasses.review_info import Review, Reviews
 from parsing_pages.preprocessing.preprocessor import Preprocessor
 
 
 class MovieReviewsParser:
     KINOPOISK_URL = "https://www.kinopoisk.ru"
     MOVIE_URL_TEMP = f"{KINOPOISK_URL}/film/"
+    NA_TAG = "N/A"
 
     def __init__(self, reviews_soup):
         self.reviews_soup = reviews_soup
@@ -18,13 +20,13 @@ class MovieReviewsParser:
 
     def return_score(self, review: str) -> str:
         scores = []
-        score = "N/A"
+        score = self.NA_TAG
         for s in review.split("<p>")[-3:]:
             if self.preprocessor.has_numbers(s) and (("/" in s) or ("из" in s)):
                 scores.append(s)
 
-        score_candidate = BeautifulSoup(scores[-1], "html.parser").get_text() if scores else "N/A"
-        if scores and len(score_candidate.split(" ")) <= 4 and score_candidate != "N/A":
+        score_candidate = BeautifulSoup(scores[-1], "html.parser").get_text() if scores else self.NA_TAG
+        if scores and len(score_candidate.split(" ")) <= 4 and score_candidate != self.NA_TAG:
             score = score_candidate
         return score
 
@@ -66,7 +68,7 @@ class MovieReviewsParser:
         usefulness_ratio = review.find("li", attrs={"id": re.compile("comment_num_vote")}).get_text()
 
         direct_link = review.find("p", attrs={"class": "links"}).find(href=True)
-        direct_link = self.KINOPOISK_URL + direct_link["href"] if direct_link else "N/A"
+        direct_link = self.KINOPOISK_URL + direct_link["href"] if direct_link else self.NA_TAG
 
         return Review(movie_id, review_id, username, datetime, sentiment, subtitle, review_body, score,
                       usefulness_ratio, direct_link)
