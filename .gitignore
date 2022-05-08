@@ -9,3 +9,4 @@ data/
 *.tsv
 *.html
 *.csv
+*.parquet
