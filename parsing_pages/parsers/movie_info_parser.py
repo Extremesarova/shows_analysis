@@ -35,7 +35,7 @@ class MovieInfoParser:
                   'Рейтинг MPAA': "mpaa_rating",
                   'Время': "duration"
                   }
-    NA_TAG = "N/A"
+    NA_TAG = ""
 
     def __init__(self, movie_soup: BeautifulSoup):
         self.movie_soup = movie_soup
@@ -111,30 +111,36 @@ class MovieInfoParser:
         titles_en = [self.TITLES_MAP.get(title, "") for title in titles]
 
         info_dict: dict = dict(zip(titles_en, values))
-        
+
         info_dict["year"] = int(info_dict["year"])
         info_dict["slogan"] = info_dict["slogan"] if info_dict["slogan"] != "—" else self.NA_TAG
 
         return from_dict_to_dataclass(MovieInfo, info_dict)
 
     def get_rating(self) -> UserRating:
-        rating_imdb = ""
-        rating_count_imdb = ""
+        rating_count_imdb = self.NA_TAG
+        rating_count_kinopoisk = self.NA_TAG
 
-        rating_kinopoisk = self.movie_soup.find_all("a", attrs={"class": re.compile("film-rating-value")}
-                                                    )[0].get_text()
+        rating_kinopoisk = self.movie_soup.find_all("a", attrs={"class": re.compile("film-rating-value")})
+        rating_imdb = self.movie_soup.find_all("span", attrs={"class": re.compile("styles_valueSection")})
 
-        rating_count_kinopoisk = self.movie_soup.find_all("span", attrs={"class": re.compile("styles_count")}
-                                                          )[0].get_text()
+        if rating_kinopoisk:
+            rating_kinopoisk = rating_kinopoisk[0].get_text()
 
-        if self.movie_soup.find_all("span", attrs={"class": re.compile("styles_valueSection")}):
-            rating_imdb = self.movie_soup.find_all("span", attrs={"class": re.compile("styles_valueSection")}
-                                                   )[0].get_text()
+            rating_count_kinopoisk = self.movie_soup.find_all("span", attrs={"class": re.compile("styles_count")}
+                                                              )[0].get_text()
+        else:
+            rating_kinopoisk = self.NA_TAG
+
+        if rating_imdb:
+            rating_imdb = rating_imdb[0].get_text()
 
             rating_count_imdb = self.movie_soup.find_all("div", attrs={"class": re.compile("film-sub-rating")}
                                                          )[0].find("span",
                                                                    attrs={
                                                                        "class": re.compile("styles_count")}).get_text()
+        else:
+            rating_imdb = self.NA_TAG
 
         return UserRating(rating_kinopoisk, rating_count_kinopoisk, rating_imdb, rating_count_imdb)
 
@@ -145,11 +151,11 @@ class MovieInfoParser:
         return Synopsis(synopsis)
 
     def get_critics_rating(self) -> CriticsRating:
-        russian_critics_percentage = ""
-        russian_critics_number_of_reviews = ""
-        world_critics_percentage = ""
-        world_critics_star_value = ""
-        world_critics_number_of_reviews = ""
+        russian_critics_percentage = self.NA_TAG
+        russian_critics_number_of_reviews = self.NA_TAG
+        world_critics_percentage = self.NA_TAG
+        world_critics_star_value = self.NA_TAG
+        world_critics_number_of_reviews = self.NA_TAG
 
         critics = self.movie_soup.find_all("div", attrs={"class": re.compile("styles_ratingBar")})
 

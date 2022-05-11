@@ -10,7 +10,7 @@ from parsing_pages.preprocessing.preprocessor import Preprocessor
 class MovieReviewsParser:
     KINOPOISK_URL = "https://www.kinopoisk.ru"
     MOVIE_URL_TEMP = f"{KINOPOISK_URL}/film/"
-    NA_TAG = "N/A"
+    NA_TAG = ""
 
     def __init__(self, reviews_soup):
         self.reviews_soup = reviews_soup

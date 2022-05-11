@@ -23,6 +23,7 @@ def main():
     file_count = len(files)
 
     pathlist = Path(data_path).rglob("*.html")
+    i = 0
     for path in tqdm(pathlist, total=file_count, desc="Parsing movie pages", unit="page"):
         str_path = str(path)
         page_type = get_page_type(str_path)
@@ -42,10 +43,10 @@ def main():
             movie_rows_list.append(flatten_dict)
 
     movie_df = pd.DataFrame(movie_rows_list)
-    movie_df.to_parquet("movies.csv", index=False)
+    movie_df.to_parquet("movies.parquet", index=False)
 
     review_df = pd.DataFrame(review_rows_list)
-    review_df.to_parquet("reviews.csv", index=False)
+    review_df.to_parquet("reviews.parquet", index=False)
 
 
 if __name__ == "__main__":
