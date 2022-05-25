@@ -40,12 +40,16 @@ class MovieInfo:
     russian_box_office: str
     russian_premiere: str
     world_premiere: str
-    digital_release: str
     dvd_release: str
     blue_ray_release: str
     age_rating: str
     mpaa_rating: str
     duration: str
+    digital_release: str
+    marketing: str
+    platform: str
+    rerelease: str
+    film_director: str
 
 
 def from_dict_to_dataclass(cls, data):

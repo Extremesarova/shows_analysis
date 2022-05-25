@@ -1,4 +1,5 @@
 import re
+from dataclasses import asdict
 
 from bs4 import BeautifulSoup, Tag
 
@@ -73,10 +74,10 @@ class MovieReviewsParser:
         return Review(movie_id, review_id, username, datetime, sentiment, subtitle, review_body, score,
                       usefulness_ratio, direct_link)
 
-    def get_reviews(self) -> Reviews:
+    def get_reviews(self) -> dict:
         reviews = self.reviews_soup.find_all("div", attrs={"class": "reviewItem userReview"})
         review_list = []
         for review in reviews:
             review_list.append(self.parse_review(review))
 
-        return Reviews(review_list)
+        return asdict(Reviews(review_list))['review']

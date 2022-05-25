@@ -1,4 +1,5 @@
 import re
+from dataclasses import asdict
 
 from bs4 import BeautifulSoup
 
@@ -9,45 +10,41 @@ from parsing_pages.preprocessing.preprocessor import Preprocessor
 
 class MovieInfoParser:
     MOVIE_URL_TEMP = "https://www.kinopoisk.ru/film/"
-    TITLES_MAP = {'Год производства': "year",
-                  'Страна': "country",
-                  'Жанр': "genre",
-                  'Слоган': "slogan",
-                  'Режиссер': "director",
-                  'Сценарий': "scriptwriter",
-                  'Продюсер': "producer",
-                  'Оператор': "operator",
-                  'Композитор': "composer",
-                  'Художник': "artist",
-                  'Монтаж': "cut",
-                  'Бюджет': "budget",
-                  'Маркетинг': "marketing",
-                  'Сборы в США': "us_box_office",
-                  'Сборы в мире': "world_box_office",
-                  'Зрители': "viewers",
-                  'Сборы в России': "russian_box_office",
-                  'Премьера в Росcии': "russian_premiere",
-                  'Премьера в мире': "world_premiere",
-                  'Цифровой релиз': "digital_release",
-                  'Релиз на DVD': "dvd_release",
-                  'Релиз на Blu-ray': "blue_ray_release",
-                  'Возраст': "age_rating",
-                  'Рейтинг MPAA': "mpaa_rating",
-                  'Время': "duration"
+    TITLES_MAP = {"Год производства": "year",
+                  "Страна": "country",
+                  "Жанр": "genre",
+                  "Слоган": "slogan",
+                  "Режиссер": "director",
+                  "Сценарий": "scriptwriter",
+                  "Продюсер": "producer",
+                  "Оператор": "operator",
+                  "Композитор": "composer",
+                  "Художник": "artist",
+                  "Монтаж": "cut",
+                  "Бюджет": "budget",
+                  "Сборы в США": "us_box_office",
+                  "Сборы в мире": "world_box_office",
+                  "Зрители": "viewers",
+                  "Сборы в России": "russian_box_office",
+                  "Премьера в Росcии": "russian_premiere",
+                  "Премьера в мире": "world_premiere",
+                  "Релиз на DVD": "dvd_release",
+                  "Релиз на Blu-ray": "blue_ray_release",
+                  "Возраст": "age_rating",
+                  "Рейтинг MPAA": "mpaa_rating",
+                  "Время": "duration",
+                  "Цифровой релиз": "digital_release",
+                  "Маркетинг": "marketing",
+                  "Платформа": "platform",
+                  "Ре-релиз (РФ)": "rerelease",
+                  "Директор фильма": "film_director"
                   }
     NA_TAG = ""
 
     def __init__(self, movie_soup: BeautifulSoup):
         self.movie_soup = movie_soup
         self.preprocessor = Preprocessor()
-
-        self.movie_info = MoviePage(id=self.get_id(),
-                                    titles=self.get_titles(),
-                                    cast=self.get_actors(),
-                                    info=self.get_info(),
-                                    user_rating=self.get_rating(),
-                                    synopsis=self.get_synopsis(),
-                                    critics_rating=self.get_critics_rating())
+        self.movie_info = self.get_movie_info()
 
     @staticmethod
     def right_strip_trailing(original: str, trailing: str) -> str:
@@ -188,3 +185,18 @@ class MovieInfoParser:
 
         return CriticsRating(world_critics_percentage, world_critics_star_value, world_critics_number_of_reviews,
                              russian_critics_percentage, russian_critics_number_of_reviews)
+
+    def get_movie_info(self) -> dict:
+        movie_info = asdict(MoviePage(id=self.get_id(),
+                                      titles=self.get_titles(),
+                                      cast=self.get_actors(),
+                                      info=self.get_info(),
+                                      user_rating=self.get_rating(),
+                                      synopsis=self.get_synopsis(),
+                                      critics_rating=self.get_critics_rating()))
+
+        flatten_dict = {}
+        for key, value in movie_info.items():
+            flatten_dict = {**flatten_dict, **value}
+
+        return flatten_dict
