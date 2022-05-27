@@ -10,3 +10,4 @@ data/
 *.html
 *.csv
 *.parquet
+cache_folder/
