@@ -8,7 +8,7 @@ from parsing_pages.dataclasses.movie_info import ShowId, Titles, Cast, MovieInfo
 from parsing_pages.preprocessing.preprocessor import Preprocessor
 
 
-class MovieInfoParser:
+class SeriesInfoParser:
     MOVIE_URL_TEMP = "https://www.kinopoisk.ru/film/"
     TITLES_MAP = {"Год производства": "year",
                   "Страна": "country",
@@ -24,7 +24,6 @@ class MovieInfoParser:
                   "Бюджет": "budget",
                   "Сборы в США": "us_box_office",
                   "Сборы в мире": "world_box_office",
-                  "Зрители": "viewers",
                   "Сборы в России": "russian_box_office",
                   "Премьера в Росcии": "russian_premiere",
                   "Премьера в мире": "world_premiere",
@@ -34,17 +33,15 @@ class MovieInfoParser:
                   "Рейтинг MPAA": "mpaa_rating",
                   "Время": "duration",
                   "Цифровой релиз": "digital_release",
-                  "Маркетинг": "marketing",
                   "Платформа": "platform",
-                  "Ре-релиз (РФ)": "rerelease",
                   "Директор фильма": "film_director"
                   }
     NA_TAG = ""
 
-    def __init__(self, movie_soup: BeautifulSoup):
-        self.movie_soup = movie_soup
+    def __init__(self, series_soup: BeautifulSoup):
+        self.series_soup = series_soup
         self.preprocessor = Preprocessor()
-        self.movie_info = self.get_movie_info()
+        self.series_info = self.get_series_info()
 
     @staticmethod
     def right_strip_trailing(original: str, trailing: str) -> str:
@@ -55,22 +52,22 @@ class MovieInfoParser:
             return original
 
     def get_id(self) -> ShowId:
-        id = self.movie_soup.find_all("link", attrs={"href": re.compile(self.MOVIE_URL_TEMP)})[0]
+        id = self.series_soup.find_all("link", attrs={"href": re.compile(self.MOVIE_URL_TEMP)})[0]
         id = int(id["href"].split("/")[-2])
         return ShowId(id=id)
 
     def get_titles(self) -> Titles:
         # TODO preprocess values
-        russian_title: str = self.movie_soup.find_all("h1", attrs={"class": re.compile("styles_title")})[0].get_text()
+        russian_title: str = self.series_soup.find_all("h1", attrs={"class": re.compile("styles_title")})[0].get_text()
         original_title: str = \
-            self.movie_soup.find_all("span", attrs={"class": re.compile("styles_originalTitle")})[
-                0].get_text() if self.movie_soup.find_all("span",
-                                                          attrs={"class": re.compile("styles_originalTitle")}) else ""
+            self.series_soup.find_all("span", attrs={"class": re.compile("styles_originalTitle")})[
+                0].get_text() if self.series_soup.find_all("span",
+                                                           attrs={"class": re.compile("styles_originalTitle")}) else ""
 
         return Titles(russian_title, original_title)
 
     def get_actors(self) -> Cast:
-        actor_soups = [tag_ for tag_ in self.movie_soup.find_all("ul", attrs={"class": re.compile("styles_list")})]
+        actor_soups = [tag_ for tag_ in self.series_soup.find_all("ul", attrs={"class": re.compile("styles_list")})]
         voice_actors_tag = None
 
         if len(actor_soups) == 2:
@@ -91,7 +88,7 @@ class MovieInfoParser:
 
     def get_info(self) -> MovieInfo:
         # TODO preprocess values
-        movie_info_divs = self.movie_soup.find_all("div", attrs={"data-test-id": re.compile("encyclopedic-table")})[0]
+        movie_info_divs = self.series_soup.find_all("div", attrs={"data-test-id": re.compile("encyclopedic-table")})[0]
         row_divs = movie_info_divs.find_all("div", attrs={"class": re.compile("styles_row")})
         values = []
         titles = []
@@ -118,32 +115,32 @@ class MovieInfoParser:
         rating_count_imdb = self.NA_TAG
         rating_count_kinopoisk = self.NA_TAG
 
-        rating_kinopoisk = self.movie_soup.find_all("a", attrs={"class": re.compile("film-rating-value")})
-        rating_imdb = self.movie_soup.find_all("span", attrs={"class": re.compile("styles_valueSection")})
+        rating_kinopoisk = self.series_soup.find_all("a", attrs={"class": re.compile("film-rating-value")})
+        rating_imdb = self.series_soup.find_all("span", attrs={"class": re.compile("styles_valueSection")})
 
         if rating_kinopoisk:
             rating_kinopoisk = rating_kinopoisk[0].get_text()
 
-            rating_count_kinopoisk = self.movie_soup.find_all("span", attrs={"class": re.compile("styles_count")}
-                                                              )[0].get_text()
+            rating_count_kinopoisk = self.series_soup.find_all("span", attrs={"class": re.compile("styles_count")}
+                                                               )[0].get_text()
         else:
             rating_kinopoisk = self.NA_TAG
 
         if rating_imdb:
             rating_imdb = rating_imdb[0].get_text()
 
-            rating_count_imdb = self.movie_soup.find_all("div", attrs={"class": re.compile("film-sub-rating")}
-                                                         )[0].find("span",
-                                                                   attrs={
-                                                                       "class": re.compile("styles_count")}).get_text()
+            rating_count_imdb = self.series_soup.find_all("div", attrs={"class": re.compile("film-sub-rating")}
+                                                          )[0].find("span",
+                                                                    attrs={
+                                                                        "class": re.compile("styles_count")}).get_text()
         else:
             rating_imdb = self.NA_TAG
 
         return UserRating(rating_kinopoisk, rating_count_kinopoisk, rating_imdb, rating_count_imdb)
 
     def get_synopsis(self) -> Synopsis:
-        synopsis = self.movie_soup.find_all("div", attrs={"class": re.compile("styles_filmSynopsis")}
-                                            )[0].get_text()
+        synopsis = self.series_soup.find_all("div", attrs={"class": re.compile("styles_filmSynopsis")}
+                                             )[0].get_text()
 
         return Synopsis(synopsis)
 
@@ -154,7 +151,7 @@ class MovieInfoParser:
         world_critics_star_value = self.NA_TAG
         world_critics_number_of_reviews = self.NA_TAG
 
-        critics = self.movie_soup.find_all("div", attrs={"class": re.compile("styles_ratingBar")})
+        critics = self.series_soup.find_all("div", attrs={"class": re.compile("styles_ratingBar")})
 
         if critics:
             world_critics = critics[0]
@@ -186,7 +183,7 @@ class MovieInfoParser:
         return CriticsRating(world_critics_percentage, world_critics_star_value, world_critics_number_of_reviews,
                              russian_critics_percentage, russian_critics_number_of_reviews)
 
-    def get_movie_info(self) -> dict:
+    def get_series_info(self) -> dict:
         movie_info = asdict(MoviePage(id=self.get_id(),
                                       titles=self.get_titles(),
                                       cast=self.get_actors(),

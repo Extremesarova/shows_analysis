@@ -4,7 +4,7 @@ from typing import List
 
 
 @dataclass
-class MovieId:
+class ShowId:
     id: int
 
 
@@ -85,7 +85,7 @@ class CriticsRating:
 
 @dataclass
 class MoviePage:
-    id: MovieId
+    id: ShowId
     titles: Titles
     cast: Cast
     info: MovieInfo

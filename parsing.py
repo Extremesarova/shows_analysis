@@ -9,7 +9,7 @@ from tqdm.contrib.concurrent import process_map  # or thread_map
 
 from config.config_reader import ConfigReader
 from parsing_pages.parsers.movie_info_parser import MovieInfoParser
-from parsing_pages.parsers.movie_reviews_parser import MovieReviewsParser
+from parsing_pages.parsers.reviews_parser import ReviewsParser
 from parsing_pages.reading.html_reader import PageReader
 from utils import get_page_type
 
@@ -22,9 +22,9 @@ def run_multiprocessing(func, i, n_processors):
 
 def get_review_dict(path: str) -> dict:
     soup = PageReader(path).get_soup()
-    movie_review_parser = MovieReviewsParser(soup)
+    movie_review_parser = ReviewsParser(soup)
 
-    return movie_review_parser.movie_reviews
+    return movie_review_parser.reviews
 
 
 def get_movie_dict(path: str) -> dict:

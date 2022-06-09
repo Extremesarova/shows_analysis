@@ -3,21 +3,21 @@ from dataclasses import asdict
 
 from bs4 import BeautifulSoup, Tag
 
-from parsing_pages.dataclasses.movie_info import MovieId
+from parsing_pages.dataclasses.movie_info import ShowId
 from parsing_pages.dataclasses.review_info import Review, Reviews
 from parsing_pages.preprocessing.preprocessor import Preprocessor
 
 
-class MovieReviewsParser:
+class ReviewsParser:
     KINOPOISK_URL = "https://www.kinopoisk.ru"
-    MOVIE_URL_TEMP = f"{KINOPOISK_URL}/film/"
+    URL_TEMP = f"{KINOPOISK_URL}/film/"
     NA_TAG = ""
 
     def __init__(self, reviews_soup):
         self.reviews_soup = reviews_soup
         self.preprocessor = Preprocessor()
-        self.movie_id = self.get_id().id
-        self.movie_reviews = self.get_reviews()
+        self.id = self.get_id().id
+        self.reviews = self.get_reviews()
 
     def return_score(self, review: str) -> str:
         scores = []
@@ -31,15 +31,15 @@ class MovieReviewsParser:
             score = score_candidate
         return score
 
-    def get_id(self) -> MovieId:
-        id = self.reviews_soup.find_all("link", attrs={"href": re.compile(self.MOVIE_URL_TEMP)})[0]
+    def get_id(self) -> ShowId:
+        id = self.reviews_soup.find_all("link", attrs={"href": re.compile(self.URL_TEMP)})[0]
         id = int(id["href"].split("/")[-3])
-        return MovieId(id=id)
+        return ShowId(id=id)
 
     def parse_review(self, review: Tag) -> Review:
         username = review.find_all("p", attrs={"class": "profile_name"})[0].get_text()
 
-        movie_id = self.movie_id
+        movie_id = self.id
 
         review_id = review.find_all("p", attrs={"class": "profile_name"})[0].find_all("a", href=True)[0]
         review_id = int(review_id["href"].split("/")[-2])
