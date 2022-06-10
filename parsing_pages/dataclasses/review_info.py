@@ -4,7 +4,7 @@ from typing import List
 
 @dataclass
 class Review:
-    movie_id: int
+    show_id: int
     review_id: int
     username: str
     datetime: str

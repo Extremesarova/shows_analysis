@@ -39,7 +39,7 @@ class ReviewsParser:
     def parse_review(self, review: Tag) -> Review:
         username = review.find_all("p", attrs={"class": "profile_name"})[0].get_text()
 
-        movie_id = self.id
+        show_id = self.id
 
         review_id = review.find_all("p", attrs={"class": "profile_name"})[0].find_all("a", href=True)[0]
         review_id = int(review_id["href"].split("/")[-2])
@@ -71,7 +71,7 @@ class ReviewsParser:
         direct_link = review.find("p", attrs={"class": "links"}).find(href=True)
         direct_link = self.KINOPOISK_URL + direct_link["href"] if direct_link else self.NA_TAG
 
-        return Review(movie_id, review_id, username, datetime, sentiment, subtitle, review_body, score,
+        return Review(show_id, review_id, username, datetime, sentiment, subtitle, review_body, score,
                       usefulness_ratio, direct_link)
 
     def get_reviews(self) -> dict:
