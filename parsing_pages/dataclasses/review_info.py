@@ -11,7 +11,6 @@ class Review:
     sentiment: str
     subtitle: str
     review_body: str
-    score: str
     usefulness_ratio: str
     direct_link: str
 

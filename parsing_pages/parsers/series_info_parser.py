@@ -34,4 +34,4 @@ class SeriesInfoParser(ShowInfoParser):
 
     def __init__(self, series_soup: BeautifulSoup):
         super().__init__(series_soup)
-        self.series_info = self.get_show_info()
+        self.show_info = self.get_show_info()

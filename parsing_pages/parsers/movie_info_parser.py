@@ -37,4 +37,4 @@ class MovieInfoParser(ShowInfoParser):
 
     def __init__(self, movie_soup: BeautifulSoup):
         super().__init__(movie_soup)
-        self.movie_info = self.get_show_info()
+        self.show_info = self.get_show_info()

@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 
 from parsing_pages.dataclasses.movie_info import ShowId, Titles, Cast, MovieInfo, UserRating, Synopsis, \
     CriticsRating, MoviePage, from_dict_to_dataclass
-from parsing_pages.preprocessing.preprocessor import Preprocessor
 
 
 class ShowInfoParser:
@@ -15,7 +14,7 @@ class ShowInfoParser:
 
     def __init__(self, show_soup: BeautifulSoup):
         self.show_soup = show_soup
-        self.preprocessor = Preprocessor()
+        # self.preprocessor = Preprocessor()
         self.show_info = self.get_show_info()
 
     @staticmethod
@@ -46,7 +45,7 @@ class ShowInfoParser:
         voice_actors_tag = None
         voice_actors = []
         actors = []
-        
+
         if actor_soups:
             if len(actor_soups) == 2:
                 actors_soup_tag, voice_actors_tag = actor_soups
