@@ -22,3 +22,4 @@ spacy-langdetect==0.1.2
 spacy==3.3.0
 pandas==1.4.2
 loguru==0.6.0
+dateparser==1.1.1
