@@ -39,9 +39,6 @@ class ReviewsParser:
 
         show_id = self.get_id().id
 
-        review_id = review.find_all("p", attrs={"class": "profile_name"})[0].find_all("a", href=True)[0]
-        review_id = int(review_id["href"].split("/")[-2])
-
         datetime = review.find_all("span", attrs={"class": "date"})[0]
         datetime = datetime.get_text().replace("|", "").strip()
         datetime = " ".join(datetime.split())
@@ -58,7 +55,7 @@ class ReviewsParser:
         direct_link = review.find("p", attrs={"class": "links"}).find(href=True)
         direct_link = self.KINOPOISK_URL + direct_link["href"] if direct_link else self.NA_TAG
 
-        return Review(show_id, review_id, username, datetime, sentiment, subtitle, review_body, usefulness_ratio,
+        return Review(show_id, username, datetime, sentiment, subtitle, review_body, usefulness_ratio,
                       direct_link)
 
     def get_reviews(self) -> dict:

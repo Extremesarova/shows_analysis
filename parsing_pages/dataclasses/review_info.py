@@ -5,7 +5,6 @@ from typing import List
 @dataclass
 class Review:
     show_id: int
-    review_id: int
     username: str
     datetime: str
     sentiment: str
