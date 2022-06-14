@@ -41,7 +41,7 @@ I've scraped information about top-1000 movies and top-1000 series in Russia.
 
 ## Analysis
 
-[**Research on the quality of localization of movie titles**](https://github.com/Extremesarova/movie_reviews/blob/main/analysis/1_title_localization_analysis/movie_title_translation.ipynb)  
+### [Research on the quality of localization of movie titles](https://github.com/Extremesarova/movie_reviews/blob/main/analysis/1_title_localization_analysis/movie_title_translation.ipynb)  
 
 The goal of this research is to find out:
 

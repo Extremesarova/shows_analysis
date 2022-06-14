@@ -17,18 +17,6 @@ class ReviewsParser:
         # self.preprocessor = Preprocessor()
         self.reviews = self.get_reviews()
 
-    # def return_score(self, review: str) -> str:
-    #     scores = []
-    #     score = self.NA_TAG
-    #     for s in review.split("<p>")[-3:]:
-    #         if self.preprocessor.has_numbers(s) and (("/" in s) or ("из" in s)):
-    #             scores.append(s)
-    #
-    #     score_candidate = BeautifulSoup(scores[-1], "html.parser").get_text() if scores else self.NA_TAG
-    #     if scores and len(score_candidate.split(" ")) <= 4 and score_candidate != self.NA_TAG:
-    #         score = score_candidate
-    #     return score
-
     def get_id(self) -> ShowId:
         id = self.reviews_soup.find_all("link", attrs={"href": re.compile(self.URL_TEMP)})[0]
         id = int(id["href"].split("/")[-3])
