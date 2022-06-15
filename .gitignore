@@ -12,3 +12,4 @@ data/
 *.parquet
 cache_folder/
 0_data_anonimization/
+notebooks/
