@@ -11,3 +11,4 @@ data/
 *.csv
 *.parquet
 cache_folder/
+0_data_anonimization/
