@@ -3,8 +3,8 @@ from dataclasses import asdict
 
 from bs4 import BeautifulSoup
 
-from parsing_pages.dataclasses.movie_info import ShowId, Titles, Cast, MovieInfo, UserRating, Synopsis, \
-    CriticsRating, MoviePage, from_dict_to_dataclass
+from parsing_pages.dataclasses.show_info import ShowId, Titles, Cast, UserRating, Synopsis, \
+    CriticsRating, ShowPage
 
 
 class ShowInfoParser:
@@ -16,6 +16,9 @@ class ShowInfoParser:
         self.show_soup = show_soup
         # self.preprocessor = Preprocessor()
         self.show_info = self.get_show_info()
+
+    def get_info(self):
+        raise NotImplementedError("Subclasses should implement this!")
 
     @staticmethod
     def right_strip_trailing(original: str, trailing: str) -> str:
@@ -60,31 +63,6 @@ class ShowInfoParser:
                                 voice_actors_tag.find_all("a", attrs={"class": re.compile("styles_link")})]
 
         return Cast(actors, voice_actors)
-
-    def get_info(self) -> MovieInfo:
-        # TODO preprocess values
-        movie_info_divs = self.show_soup.find_all("div", attrs={"data-test-id": re.compile("encyclopedic-table")})[0]
-        row_divs = movie_info_divs.find_all("div", attrs={"class": re.compile("styles_row")})
-        values = []
-        titles = []
-
-        for row in row_divs:
-            title = row.find("div", attrs={"class": re.compile("styles_title")}).get_text()
-            value = row.find("div", attrs={"class": re.compile("styles_value")}).get_text()
-            value = value[:-5] if value.endswith("слова") or value.endswith("сборы") else value
-            titles.append(title)
-            values.append(value)
-
-        assert len(values) == len(titles)
-
-        titles_en = [self.TITLES_MAP.get(title, "") for title in titles]
-
-        info_dict: dict = dict(zip(titles_en, values))
-
-        info_dict["year"] = info_dict["year"]
-        info_dict["slogan"] = info_dict["slogan"] if info_dict["slogan"] != "—" else self.NA_TAG
-
-        return from_dict_to_dataclass(MovieInfo, info_dict)
 
     def get_rating(self) -> UserRating:
         rating_count_imdb = self.NA_TAG
@@ -161,16 +139,16 @@ class ShowInfoParser:
                              russian_critics_percentage, russian_critics_number_of_reviews)
 
     def get_show_info(self) -> dict:
-        movie_info = asdict(MoviePage(id=self.get_id(),
-                                      titles=self.get_titles(),
-                                      cast=self.get_actors(),
-                                      info=self.get_info(),
-                                      user_rating=self.get_rating(),
-                                      synopsis=self.get_synopsis(),
-                                      critics_rating=self.get_critics_rating()))
+        show_info = asdict(ShowPage(id=self.get_id(),
+                                    titles=self.get_titles(),
+                                    cast=self.get_actors(),
+                                    info=self.get_info(),
+                                    user_rating=self.get_rating(),
+                                    synopsis=self.get_synopsis(),
+                                    critics_rating=self.get_critics_rating()))
 
         flatten_dict = {}
-        for key, value in movie_info.items():
+        for key, value in show_info.items():
             flatten_dict = {**flatten_dict, **value}
 
         return flatten_dict

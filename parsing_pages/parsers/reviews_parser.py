@@ -3,8 +3,8 @@ from dataclasses import asdict
 
 from bs4 import Tag
 
-from parsing_pages.dataclasses.movie_info import ShowId
 from parsing_pages.dataclasses.review_info import Review, Reviews
+from parsing_pages.dataclasses.show_info import ShowId
 
 
 class ReviewsParser:

@@ -32,8 +32,8 @@ I've scraped information about top-1000 movies and top-1000 series in Russia.
       * direct link to the review
 * **Series**:
   * Info:
-    * Dimensions: (978, 43)
-    * Columns: the same as in movies
+    * Dimensions: (978, 40)
+    * Columns: the same as in movies (without viewers, marketing and rerelease columns)
   * Reviews:
     * Dimensions: (35643, 8)
     * Target class values: `good` (25540), `neutral` (5157), `bad` (4946)
