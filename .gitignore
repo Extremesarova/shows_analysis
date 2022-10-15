@@ -12,6 +12,5 @@ data/
 *.parquet
 cache_folder/
 0_data_anonimization/
-notebooks/
 .vscode/
 shows_analysis.egg-info/
