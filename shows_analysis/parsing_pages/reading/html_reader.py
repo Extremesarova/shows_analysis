@@ -8,7 +8,7 @@ class PageReader:
         self.path = path
 
     def _read_page(self) -> str:
-        with open(self.path, "r", encoding='utf-8') as f:
+        with open(self.path, "r", encoding="utf-8") as f:
             page = f.read()
 
         return page

@@ -50,10 +50,14 @@ def get_show_and_review_dicts(show_parser, path: str) -> Tuple[dict, str]:
 
 def save_dfs(data_path: str, show_type: str, show_rows: list, review_rows: list):
     movie_df = pd.DataFrame(show_rows)
-    movie_df.to_parquet(os.path.join(data_path, f"raw_{show_type}_info.parquet"), index=False)
+    movie_df.to_parquet(
+        os.path.join(data_path, f"raw_{show_type}_info.parquet"), index=False
+    )
 
     review_df = pd.DataFrame(review_rows)
-    review_df.to_parquet(os.path.join(data_path, f"raw_{show_type}_reviews.parquet"), index=False)
+    review_df.to_parquet(
+        os.path.join(data_path, f"raw_{show_type}_reviews.parquet"), index=False
+    )
 
 
 def parse_pages(show_type: str, read_path: str, n_processors: int):
