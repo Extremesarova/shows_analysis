@@ -6,13 +6,13 @@ from typing import Tuple
 import pandas as pd
 import typer
 from loguru import logger
+from parsers.movie_info_parser import MovieInfoParser
+from parsers.reviews_parser import ReviewsParser
+from parsers.series_info_parser import SeriesInfoParser
+from reading.html_reader import PageReader
 from tqdm.contrib.concurrent import process_map
 
-from parsing_pages.parsers.movie_info_parser import MovieInfoParser
-from parsing_pages.parsers.reviews_parser import ReviewsParser
-from parsing_pages.parsers.series_info_parser import SeriesInfoParser
-from parsing_pages.reading.html_reader import PageReader
-from utils import get_page_type
+from shows_analysis.utils import get_page_type
 
 app = typer.Typer()
 

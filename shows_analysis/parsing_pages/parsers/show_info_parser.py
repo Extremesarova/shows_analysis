@@ -3,8 +3,13 @@ from dataclasses import asdict
 
 from bs4 import BeautifulSoup
 
-from parsing_pages.dataclasses.show_info import ShowId, Titles, Cast, UserRating, Synopsis, \
-    CriticsRating, ShowPage
+from shows_analysis.parsing_pages.dataobjects.show_info import (Cast,
+                                                                CriticsRating,
+                                                                ShowId,
+                                                                ShowPage,
+                                                                Synopsis,
+                                                                Titles,
+                                                                UserRating)
 
 
 class ShowInfoParser:

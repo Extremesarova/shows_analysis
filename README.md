@@ -1,4 +1,4 @@
-# Russian Show Analysis
+# Show Analysis
 
 General info
 

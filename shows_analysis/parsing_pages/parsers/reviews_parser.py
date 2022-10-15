@@ -3,8 +3,11 @@ from dataclasses import asdict
 
 from bs4 import Tag
 
-from parsing_pages.dataclasses.review_info import Review, Reviews
-from parsing_pages.dataclasses.show_info import ShowId
+from shows_analysis.parsing_pages.dataobjects.review_info import (Review,
+                                                                  Reviews)
+from shows_analysis.parsing_pages.dataobjects.show_info import ShowId
+from shows_analysis.parsing_pages.parsers.show_info_parser import \
+    ShowInfoParser
 
 
 class ReviewsParser:
@@ -17,7 +20,7 @@ class ReviewsParser:
         # self.preprocessor = Preprocessor()
         self.reviews = self.get_reviews()
 
-    def get_id(self) -> ShowId:
+    def get_id(self) -> ShowInfoParser:
         id = self.reviews_soup.find_all("link", attrs={"href": re.compile(self.URL_TEMP)})[0]
         id = int(id["href"].split("/")[-3])
         return ShowId(id=id)
