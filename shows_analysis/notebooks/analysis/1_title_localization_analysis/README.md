@@ -1,6 +1,6 @@
 # Analysis
 
-## [Research on the quality of localization of movie titles](https://github.com/Extremesarova/movie_reviews/blob/main/shows_analysis_notebooks/1_title_localization_analysis/movie_title_translation.ipynb)  
+## [Research on the quality of localization of movie titles](https://nbviewer.org/github/Extremesarova/shows_analysis/blob/main/shows_analysis/notebooks/analysis/1_title_localization_analysis/movie_title_translation.ipynb)  
 
 The goal of this research is to find out:
 
@@ -9,9 +9,11 @@ The goal of this research is to find out:
 
 **Results**:
 
-1) In general, I can say that the titles are somewhat similar - the title similarity distribution is left-skewed.  
-![Title similarity](../../../../static/title_similarity.png "Title similarity")
+In general, I can say that the titles are somewhat similar - the title similarity distribution is left-skewed.  
+<img src="../../../../static/title_similarity.png" width="482" height="240"/>
+
 Average similarity is equal to 0.73 (median is 0.78)
+
 1) There are a few cases for dissimilarity:  
     **Russian title is a cropped version of original title**  
     <span style="color:grey">Another problem in this case can be the fact that embeddings don't work very well with proper names like Borat::Борат, Dolittle::Дулиттл, and so on.</span>
