@@ -48,15 +48,19 @@ def get_show_and_review_dicts(show_parser, path: str) -> Tuple[dict, str]:
         return show_dict, page_type
 
 
+def create_dir(path: str):
+    Path(path).mkdir(parents=True, exist_ok=True)
+
+
 def save_dfs(data_path: str, show_type: str, show_rows: list, review_rows: list):
-    movie_df = pd.DataFrame(show_rows)
-    movie_df.to_parquet(
-        os.path.join(data_path, f"raw_{show_type}_info.parquet"), index=False
+    show_df = pd.DataFrame(show_rows)
+    show_df.to_parquet(
+        os.path.join(data_path, f"{show_type}_info.parquet"), index=False
     )
 
     review_df = pd.DataFrame(review_rows)
     review_df.to_parquet(
-        os.path.join(data_path, f"raw_{show_type}_reviews.parquet"), index=False
+        os.path.join(data_path, f"{show_type}_reviews.parquet"), index=False
     )
 
 
@@ -84,9 +88,13 @@ def parse_pages(show_type: str, read_path: str, n_processors: int):
 
 @app.command()
 def parse(data_path: str, show_type: str, n_processors: int):
-    read_path = os.path.join(data_path, show_type)
+    read_path = os.path.join(data_path, "pages", show_type)
+    save_path = os.path.join(data_path, "0_raw_parsed_data")
+    create_dir(save_path)
+
     show_rows, review_rows = parse_pages(show_type, read_path, n_processors)
-    save_dfs(data_path, show_type, show_rows, review_rows)
+
+    save_dfs(save_path, show_type, show_rows, review_rows)
 
 
 if __name__ == "__main__":
