@@ -1,0 +1,111 @@
+from typing import Any, List
+
+import numpy as np
+import torch
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+class Tokenizer:
+    def __init__(
+        self,
+        model_name: str = "Tatyana/rubert-base-cased-sentiment-new",
+        max_length=512,
+    ):
+        self.max_length = max_length
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+    def tokenize(
+        self,
+        texts: List[str],
+        padding: bool = True,
+        truncation: bool = True,
+    ) -> List[str]:
+
+        inputs = self.tokenizer(
+            texts,
+            padding=padding,
+            truncation=truncation,
+            max_length=self.max_length,
+            return_tensors="pt",
+        ).to(DEVICE)
+
+        return inputs
+
+
+class Model:
+    def __init__(
+        self,
+        model_name: str = "Tatyana/rubert-base-cased-sentiment-new",
+    ) -> None:
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_name).to(
+            DEVICE
+        )
+
+    def get_logits(self, inputs):
+        with torch.no_grad():
+            logits = self.model(**inputs).logits
+
+        return logits
+
+    def logits_to_labels(self, logits) -> List[str]:
+        predicted_class_ids = logits.argmax(axis=1).cpu().detach().numpy()
+
+        pred_labels = [
+            self.model.config.id2label[predicted_class_id]
+            for predicted_class_id in predicted_class_ids
+        ]
+
+        return pred_labels
+
+
+class InferencePipeline:
+    def __init__(
+        self,
+        model_name: str = "Tatyana/rubert-base-cased-sentiment-new",
+        max_length=512,
+        batch_size=168,
+        correction_map: dict = {
+            "POSITIVE": "positive",
+            "NEUTRAL": "neutral",
+            "NEGATIVE": "negative",
+        },
+    ) -> None:
+        self.max_length = max_length
+        self.batch_size = batch_size
+        self.correction_map = correction_map
+
+        self.tokenizer = Tokenizer(model_name=model_name, max_length=max_length)
+        self.model = Model(model_name=model_name)
+
+    def generate_batches(self, X: List[Any], y: List[Any]):
+        assert len(X) == len(y)
+
+        np.random.seed(42)
+
+        X = np.array(X)
+        y = np.array(y)
+
+        perm = np.random.permutation(len(X))
+
+        for batch_start in range(0, len(X), self.batch_size):
+            selection = perm[batch_start : batch_start + self.batch_size]
+            X_batch = X[selection]
+            y_batch = y[selection]
+
+            yield X_batch, y_batch
+
+    def correct_labels(self, labels: List[str]) -> List[str]:
+        corrected_labels = [self.correction_map[label] for label in labels]
+
+        return corrected_labels
+
+    def texts_to_sentiments(self, texts: List[str]) -> List[str]:
+
+        inputs = self.tokenizer.tokenize(texts)
+        logits = self.model.get_logits(inputs)
+        pred_labels = self.model.logits_to_labels(logits=logits)
+        pred_labels = self.correct_labels(pred_labels)
+
+        return pred_labels
