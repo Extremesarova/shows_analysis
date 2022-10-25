@@ -1,7 +1,10 @@
+import math
 from typing import Any, List
 
 import numpy as np
 import torch
+from sklearn.metrics import f1_score
+from tqdm.auto import tqdm
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -63,6 +66,8 @@ class Model:
 class InferencePipeline:
     def __init__(
         self,
+        texts: List[str],
+        class_labels: List[Any],
         model_name: str = "Tatyana/rubert-base-cased-sentiment-new",
         max_length=512,
         batch_size=168,
@@ -72,10 +77,16 @@ class InferencePipeline:
             "NEGATIVE": "negative",
         },
     ) -> None:
+        self.texts = texts
+        self.class_labels = class_labels
+        self.pred_labels = []
+
         self.max_length = max_length
         self.batch_size = batch_size
         self.correction_map = correction_map
+        self.num_batches = math.ceil(len(texts) / batch_size)
 
+        self.model_name = model_name
         self.tokenizer = Tokenizer(model_name=model_name, max_length=max_length)
         self.model = Model(model_name=model_name)
 
@@ -102,10 +113,28 @@ class InferencePipeline:
         return corrected_labels
 
     def texts_to_sentiments(self, texts: List[str]) -> List[str]:
-
         inputs = self.tokenizer.tokenize(texts)
         logits = self.model.get_logits(inputs)
         pred_labels = self.model.logits_to_labels(logits=logits)
         pred_labels = self.correct_labels(pred_labels)
 
         return pred_labels
+
+    def batch_inference(self):
+        print(f"Inferencing using {self.model_name} model")
+        for texts_batch, _ in tqdm(
+            self.generate_batches(self.texts, self.class_labels), total=self.num_batches
+        ):
+            self.pred_labels.extend(
+                self.texts_to_sentiments(
+                    texts=list(texts_batch),
+                )
+            )
+
+
+    @staticmethod
+    def get_f1_score(y_true, y_pred, averaging="micro"):
+        assert len(y_true) == len(y_pred), "Check labels"
+
+        f1 = round(f1_score(y_true, y_pred, average=averaging), 3)
+        return f1
