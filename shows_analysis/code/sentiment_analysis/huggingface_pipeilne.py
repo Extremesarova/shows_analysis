@@ -1,3 +1,4 @@
+import gc
 import math
 from typing import Any, List
 
@@ -76,7 +77,7 @@ class InferencePipeline:
             "NEUTRAL": "neutral",
             "NEGATIVE": "negative",
         },
-    ) -> None:
+    ) -> None:        
         self.texts = texts
         self.class_labels = class_labels
         self.pred_labels = []
@@ -87,6 +88,10 @@ class InferencePipeline:
         self.num_batches = math.ceil(len(texts) / batch_size)
 
         self.model_name = model_name
+        
+        torch.cuda.empty_cache()
+        gc.collect()
+
         self.tokenizer = Tokenizer(model_name=model_name, max_length=max_length)
         self.model = Model(model_name=model_name)
 
