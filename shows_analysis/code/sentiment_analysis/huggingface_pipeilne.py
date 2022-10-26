@@ -93,17 +93,13 @@ class InferencePipeline:
     def generate_batches(self, X: List[Any], y: List[Any]):
         assert len(X) == len(y)
 
-        np.random.seed(42)
-
         X = np.array(X)
         y = np.array(y)
 
-        perm = np.random.permutation(len(X))
-
         for batch_start in range(0, len(X), self.batch_size):
-            selection = perm[batch_start : batch_start + self.batch_size]
-            X_batch = X[selection]
-            y_batch = y[selection]
+            batch_end = batch_start + self.batch_size
+            X_batch = X[batch_start:batch_end]
+            y_batch = y[batch_start:batch_end]
 
             yield X_batch, y_batch
 
@@ -121,16 +117,19 @@ class InferencePipeline:
         return pred_labels
 
     def batch_inference(self):
-        print(f"Inferencing using {self.model_name} model")
+        print(
+            f"Inferencing using {self.model_name} model with batch_size={self.batch_size}"
+        )
         for texts_batch, _ in tqdm(
-            self.generate_batches(self.texts, self.class_labels), total=self.num_batches
+            self.generate_batches(self.texts, self.class_labels),
+            total=self.num_batches,
+            unit="batch",
         ):
             self.pred_labels.extend(
                 self.texts_to_sentiments(
                     texts=list(texts_batch),
                 )
             )
-
 
     @staticmethod
     def get_f1_score(y_true, y_pred, averaging="micro"):
