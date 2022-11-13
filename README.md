@@ -6,6 +6,10 @@ Here is the plan of what I'm going to do:
 
 - [Show Analysis](#show-analysis)
   - [Parsing web-pages to collect the datasets](#parsing-web-pages-to-collect-the-datasets)
+  - [Data Preprocessing](#data-preprocessing)
+    - [Anonymization](#anonymization)
+    - [Transformation](#transformation)
+    - [Exploratory Data Analysis](#exploratory-data-analysis)
   - [Building ML applications](#building-ml-applications)
     - [Sentiment analysis of show reviews](#sentiment-analysis-of-show-reviews)
       - [Baseline: TF-IDF + Logistic Regression](#baseline-tf-idf--logistic-regression)
@@ -21,6 +25,14 @@ Here is the plan of what I'm going to do:
 
 The first step is collecting data. I've scraped information about top-1000 movies and top-1000 series.  
 To learn more about scraped data and how exactly it was done [go here](https://github.com/Extremesarova/shows_analysis/tree/main/shows_analysis/code/parsing_pages).
+
+## Data Preprocessing
+
+### Anonymization
+
+### Transformation
+
+### Exploratory Data Analysis
 
 ## Building ML applications
 
