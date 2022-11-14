@@ -30,13 +30,17 @@ To learn more about scraped data and how exactly it was done [go here](https://g
 
 ### Anonymization
 
+TODO
+
 ### Transformation
 
-### Exploratory Data Analysis
+TODO
+
+### [Exploratory Data Analysis](https://nbviewer.org/github/Extremesarova/shows_analysis/blob/main/shows_analysis/notebooks/3_datasets_eda/reviews_eda.ipynb)
 
 ## Building ML applications
 
-### [Sentiment analysis of show reviews](https://github.com/Extremesarova/shows_analysis/tree/main/shows_analysis/notebooks/3_sentiment_analysis)
+### [Sentiment analysis of show reviews](https://github.com/Extremesarova/shows_analysis/tree/main/shows_analysis/notebooks/4_sentiment_analysis)
 
 The goal of this analysis is to:
 
@@ -44,7 +48,7 @@ The goal of this analysis is to:
 - Investigate available pretrained models (`wor2vec`, `fasttext`, `navec`, models from sber, deeppavlov and others)
 - Learn how to fine-tune `BERT`-like models for classification tasks
 
-#### [Baseline: TF-IDF + Logistic Regression](https://nbviewer.org/github/Extremesarova/shows_analysis/blob/main/shows_analysis/notebooks/3_sentiment_analysis/01_baseline.ipynb)
+#### [Baseline: TF-IDF + Logistic Regression](https://nbviewer.org/github/Extremesarova/shows_analysis/blob/main/shows_analysis/notebooks/4_sentiment_analysis/01_baseline.ipynb)
 
 As a baseline, I've decided to choose a simple combination of TF-IDF for text vectorization and Logistic Regression for classification.  
 
@@ -54,11 +58,11 @@ The micro F1 score is `0.795` for baseline. I think that it is a very strong bas
 
 TODO
 
-##### [Dostoevsky](https://nbviewer.org/github/Extremesarova/shows_analysis/blob/main/shows_analysis/notebooks/3_sentiment_analysis/02_a_pretrained_dostoevsky.ipynb)
+##### [Dostoevsky](https://nbviewer.org/github/Extremesarova/shows_analysis/blob/main/shows_analysis/notebooks/4_sentiment_analysis/02_a_pretrained_dostoevsky.ipynb)
 
 TODO
 
-##### [HuggingFace models](https://nbviewer.org/github/Extremesarova/shows_analysisblob/main/shows_analysis/notebooks/analysis/3_sentiment_analysis02_b_pretrained_huggingface.ipynb)
+##### [HuggingFace models](https://nbviewer.org/github/Extremesarova/shows_analysisblob/main/shows_analysis/notebooks/analysis/4_sentiment_analysis02_b_pretrained_huggingface.ipynb)
 
 TODO
 
@@ -82,4 +86,4 @@ The aim of this study was to find out:
 - How similar are Russian titles and original titles in general?
 - Is it possible to split dissimilar pairs (Russian title :: original title) into groups according to the root cause?
   
-To learn about results [go here](https://github.com/Extremesarova/shows_analysis/tree/main/shows_analysis/notebooks/1_title_localization_analysis).
+To learn about the results [go here](https://github.com/Extremesarova/shows_analysis/tree/main/shows_analysis/notebooks/1_title_localization_analysis).
