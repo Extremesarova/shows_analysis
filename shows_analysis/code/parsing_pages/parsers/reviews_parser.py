@@ -3,10 +3,10 @@ from dataclasses import asdict
 
 from bs4 import Tag
 
-from shows_analysis.parsing_pages.dataobjects.review_info import (Review,
+from shows_analysis.code.parsing_pages.dataobjects.review_info import (Review,
                                                                   Reviews)
-from shows_analysis.parsing_pages.dataobjects.show_info import ShowId
-from shows_analysis.parsing_pages.parsers.show_info_parser import \
+from shows_analysis.code.parsing_pages.dataobjects.show_info import ShowId
+from shows_analysis.code.parsing_pages.parsers.show_info_parser import \
     ShowInfoParser
 
 

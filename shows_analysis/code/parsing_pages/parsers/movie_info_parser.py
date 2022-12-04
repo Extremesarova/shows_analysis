@@ -2,9 +2,9 @@ import re
 
 from bs4 import BeautifulSoup
 
-from shows_analysis.parsing_pages.dataobjects.show_info import (
+from shows_analysis.code.parsing_pages.dataobjects.show_info import (
     MovieInfo, from_dict_to_dataclass)
-from shows_analysis.parsing_pages.parsers.show_info_parser import \
+from shows_analysis.code.parsing_pages.parsers.show_info_parser import \
     ShowInfoParser
 
 

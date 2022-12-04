@@ -98,9 +98,6 @@ class InferencePipeline:
     def generate_batches(self, X: List[Any], y: List[Any]):
         assert len(X) == len(y)
 
-        X = np.array(X)
-        y = np.array(y)
-
         for batch_start in range(0, len(X), self.batch_size):
             batch_end = batch_start + self.batch_size
             X_batch = X[batch_start:batch_end]
