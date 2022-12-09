@@ -26,3 +26,4 @@ dateparser==1.1.4
 lazypredict==0.2.12
 onnxruntime==1.13.1
 skl2onnx==1.12.0
+protobuf==3.20.1
