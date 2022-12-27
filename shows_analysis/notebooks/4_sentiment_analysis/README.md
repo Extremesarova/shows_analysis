@@ -1,7 +1,8 @@
-# Sentiment analysis
+# Sentiment Classification
 
-The goal of this analysis is to:
+The purpose of this analysis is to:
 
-* Get hands-on experience with packages and tools for analyzing Russian language (natasha, nltk, spacy, rnnmorph, pymorphy2)
-* Investigate available pre-trained models for Russian language (wor2vec, fasttext, navec, models from sber, deeppavlov and others)
-* Learn how to finetune BERT-like models
+* Create a baseline model for text classification;
+* Explore available pre-trained models;
+* Learn how to tune models like BERT;
+* Carry out several iterations until the desired result is achieved.
