@@ -12,7 +12,7 @@ from parsers.series_info_parser import SeriesInfoParser
 from reading.html_reader import PageReader
 from tqdm.contrib.concurrent import process_map
 
-from shows_analysis.code.utils.parsing_utils import get_page_type
+from src.utils.parsing_utils import get_page_type
 
 app = typer.Typer()
 

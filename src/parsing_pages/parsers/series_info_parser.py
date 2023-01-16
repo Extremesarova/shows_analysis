@@ -2,14 +2,12 @@ import re
 
 from bs4 import BeautifulSoup
 
-from shows_analysis.code.parsing_pages.dataobjects.show_info import (
-    MovieInfo, from_dict_to_dataclass)
-from shows_analysis.code.parsing_pages.parsers.show_info_parser import \
-    ShowInfoParser
+from src.parsing_pages.dataobjects.show_info import SeriesInfo, from_dict_to_dataclass
+from src.parsing_pages.parsers.show_info_parser import ShowInfoParser
 
 
-class MovieInfoParser(ShowInfoParser):
-    SHOW_URL_TEMP = "https://www.kinopoisk.ru/film/"
+class SeriesInfoParser(ShowInfoParser):
+    SHOW_URL_TEMP = "https://www.kinopoisk.ru/series/"
     TITLES_MAP = {
         "Год производства": "year",
         "Страна": "country",
@@ -25,7 +23,6 @@ class MovieInfoParser(ShowInfoParser):
         "Бюджет": "budget",
         "Сборы в США": "us_box_office",
         "Сборы в мире": "world_box_office",
-        "Зрители": "viewers",
         "Сборы в России": "russian_box_office",
         "Премьера в Росcии": "russian_premiere",
         "Премьера в мире": "world_premiere",
@@ -35,17 +32,15 @@ class MovieInfoParser(ShowInfoParser):
         "Рейтинг MPAA": "mpaa_rating",
         "Время": "duration",
         "Цифровой релиз": "digital_release",
-        "Маркетинг": "marketing",
         "Платформа": "platform",
-        "Ре-релиз (РФ)": "rerelease",
         "Директор фильма": "film_director",
     }
 
-    def __init__(self, movie_soup: BeautifulSoup):
-        super().__init__(movie_soup)
+    def __init__(self, series_soup: BeautifulSoup):
+        super().__init__(series_soup)
         self.show_info = self.get_show_info()
 
-    def get_info(self) -> MovieInfo:
+    def get_info(self) -> SeriesInfo:
         # TODO preprocess values
         movie_info_divs = self.show_soup.find_all(
             "div", attrs={"data-test-id": re.compile("encyclopedic-table")}
@@ -82,4 +77,4 @@ class MovieInfoParser(ShowInfoParser):
             info_dict["slogan"] if info_dict["slogan"] != "—" else self.NA_TAG
         )
 
-        return from_dict_to_dataclass(MovieInfo, info_dict)
+        return from_dict_to_dataclass(SeriesInfo, info_dict)
