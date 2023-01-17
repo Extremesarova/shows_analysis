@@ -10,8 +10,5 @@ data/
 *.html
 *.csv
 *.parquet
-cache_folder/
-0_data_anonimization/
 .vscode/
 src.egg-info/
-saved_models/
