@@ -13,5 +13,5 @@ data/
 cache_folder/
 0_data_anonimization/
 .vscode/
-shows_analysis.egg-info/
+src.egg-info/
 saved_models/
