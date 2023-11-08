@@ -1,10 +1,10 @@
 # Shows Parsing
 
-I've decided to scrape reviews for movies and series (along with general info about shows) from popular online database of information related to movies and television series and use this data to practice different data science techniques and improve my skills.  
+I've decided to parse web-pages with reviews for movies and series (along with general info about shows) from popular online database of information related to movies and television series and use this data to practice different data science techniques and improve my skills.  
 
-## Parsing web-pages to collect the datasets
+## General Information
 
-I've scraped information about top-1000 movies and top-1000 series in Russia and divided the data into 4 datasets:
+I've parsed information about top-1000 movies and top-1000 series in Russia and divided the data into 4 datasets:
 
 | Dataset Name  | Dimensions    |  Main columns|
 | ------------- | ------------- |------------- |
@@ -15,13 +15,13 @@ I've scraped information about top-1000 movies and top-1000 series in Russia and
 
 Overall, I've got `206 737` **reviews** and `1962` **shows**.
 
-Code to perform parsing can be found here:
+## Code
 
-- [Parsing](https://github.com/Extremesarova/shows_analysis/blob/main/shows_analysis/code/parsing_pages/parsing.py) to start parsing process (with multiprocessing)
-- [Dataobjects](https://github.com/Extremesarova/shows_analysis/tree/main/shows_analysis/code/parsing_pages/dataobjects) to represent review and show info abstractions
-- [Parsers](https://github.com/Extremesarova/shows_analysis/tree/main/shows_analysis/code/parsing_pages/parsers) to parse web-pages
-- [HTML Reader](https://github.com/Extremesarova/shows_analysis/blob/main/shows_analysis/code/parsing_pages/reading/html_reader.py) to read the page
-- [Parsing Utils](https://github.com/Extremesarova/shows_analysis/blob/main/shows_analysis/code/utils/parsing_utils.py)
+- [Parsing](https://github.com/Extremesarova/shows_parsing/blob/main/src/parsing_pages/parsing.py) to start parsing process (with multiprocessing)
+- [Dataobjects](https://github.com/Extremesarova/shows_parsing/tree/main/src/parsing_pages/dataobjects) to represent review and show info abstractions
+- [Parsers](https://github.com/Extremesarova/shows_parsing/tree/main/src/parsing_pages/parsers) to parse web-pages
+- [HTML Reader](https://github.com/Extremesarova/shows_parsing/blob/main/src/parsing_pages/reading/html_reader.py) to read the page
+- [Parsing Utils](https://github.com/Extremesarova/shows_parsing/blob/main/src/utils/parsing_utils.py)
 
 ## Set-up
 
